@@ -1,0 +1,10 @@
+# MacOS directory files
+.DS_Store
+
+# Project files
+sdkconfig
+sdkconfig.old
+build
+
+# VS Code Settings
+.vscode/
