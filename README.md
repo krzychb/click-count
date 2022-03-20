@@ -25,7 +25,7 @@ This example has been tested with [ESP-IDF v4.4](https://docs.espressif.com/proj
 
 **Notes:**
 
-- Ad. 1 In this particular case I am using [ESP32-PIC-KIT](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-pico-kit.html) because it is quite narrow leaving two free rows of connecting contacts on a typical breadboard.
+- Ad. 1 In this particular case I am using [ESP32-PICO-KIT](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-pico-kit.html) because it is quite narrow leaving two free rows of connecting contacts on a typical breadboard.
 - Ad. 2 Pins of tact switches are relatively short and may not provide good contact with the breadboard terminals. Therefore, to extend the pins, I have soldered jumper wires as well as pull up resistor to the pins of each switch.
 - Ad. 3 The resistors act as pull ups for the push buttons.
 - Ad. 4 Using a longer strip is also possible. To do so you need to change `8` to the actual number of LEDs of the strip in the following line of [click-count.c](main/click-count.c) application: 
@@ -170,13 +170,29 @@ The original algorithm for counting clicks discussed above should be then extend
     }
 	```
 
-### Check the Improved Algorithm
+### Manual Check of the Improved Algorithm
 
 **Note:** Before clicking the buttons connect GPIO38 to the 3.3V and reset the board. Then the click counting will be done using the improved algorithm.
 
 To check if there are no more false click counting, press the blue and the red buttons the same number of times in turns and check if the number of blue and red LEDs on the strip stays the same.
 
-You may go even further and attach a pair or relays in parallel to the button contacts. The relays may be controlled from another ESP board to simulate the clicks. The relay contacts will bounce as well! 
+You may go even further and attach a pair of relays in parallel to the button contacts. The relays may be controlled from another ESP board to simulate the clicks. The relay contacts will bounce as well! See the next section for an example of such text.
+
+### Automated Check of the Improved Algorithm
+
+The circuit that simulates manual clicks is shown below. It consists of two relays and another ESP (M5STAMP-PICO module) to control the relays. The relays are energized in turns, each one for times in one turn.
+
+![alt text](_more/click-count-relay-test.png "Automation of application testing with relays controlled by another ESP")
+
+The frequency of relay clicks processed by the application in this test is about 100 Hz. The data collected from each relay (connected to GPIO18 and GPIO22 of ESP32-PICO-KIT as the buttons in the original manual test) is shown below:
+
+![alt text](_more/relay-test-all.png "Relay clicks collected by the logic analyzer")
+
+The bounces of relay contacts are shown on the next picture. They look quite similar to these produced by push button contacts:
+
+![alt text](_more/relay-test-closeup.png "Closeup of signal produced by bouncing relay contacts")
+
+After running this setup for 10 minutes or so, I did not see any extra clicks counted by the application.
 
 ## Conclusion
 
